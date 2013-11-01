@@ -1,5 +1,6 @@
 node_modules/
 .monitor
+.idea
 config/config.js
 config/imager.js
 Makefile

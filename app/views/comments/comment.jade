@@ -1,8 +1,7 @@
 
-- if (comment && comment.user)
+- each comment in comments
   .comment
-    - var name = comment.user.name ? comment.user.name : comment.user.username
-    a(href="/users/"+comment.user._id)= name
+    = comment.user.name
     |  :&nbsp;
     = comment.body
     br
