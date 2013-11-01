@@ -21,3 +21,8 @@ body {
   background: #fff;
   border: 0;
 }
+
+textarea.input-comment {
+  height: 136px;
+  width: 514px;
+}

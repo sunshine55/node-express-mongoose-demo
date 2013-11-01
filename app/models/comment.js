@@ -13,7 +13,8 @@ var CommentSchema = new Schema({
     article: { type: Schema.ObjectId, ref: 'Article' },
     body: { type: String, default: '' },
     user: { type: Schema.ObjectId, ref: 'User' },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    parent: { type: String, default: null }
 })
 
 /**
