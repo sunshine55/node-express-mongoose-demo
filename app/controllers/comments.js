@@ -12,10 +12,12 @@ var mongoose = require('mongoose')
 exports.create = function (req, res) {
     var article = req.article
     var user = req.user
+    var parent = req.params.rpl ? req.params.rpl : null
     var comment = new Comment({
         article: article._id,
         body: req.body.body,
-        user: user._id
+        user: user._id,
+        parent: parent
     })
 
     if (!req.body.body) return res.redirect('/articles/' + article.id)
