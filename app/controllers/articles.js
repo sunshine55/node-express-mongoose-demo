@@ -118,7 +118,8 @@ exports.update = function (req, res) {
 
 exports.show = function (req, res) {
     Comment.find({ article: req.article.id })
-        .populate('user')
+        .populate('user', 'username')
+        .sort('slug')
         .exec(function (err, comments) {
             if(err) return res.render('500')
             res.render('articles/show', {

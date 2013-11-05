@@ -14,7 +14,8 @@ var CommentSchema = new Schema({
     body: { type: String, default: '' },
     user: { type: Schema.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
-    parent: { type: String, default: null }
+    slug: { type: String, default: '', index: true },
+    level: { type: Number, default: 0, max: 2 }
 })
 
 /**

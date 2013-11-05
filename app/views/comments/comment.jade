@@ -1,21 +1,22 @@
 - each comment in comments
-  .comment
-    = comment.user.name
+  div(class="comment-lv#{comment.level}")
+    b= comment.user.username
     |  :&nbsp;
     = comment.body
     br
     .muted= formatDate(comment.createdAt)
       | &nbsp;&nbsp;
-      a(data-target="#replyModal", data-toggle="modal") Reply
-    form#replyModal.modal.fade(method="post", action="/articles/#{article._id}/comments/#{comment.id}")
-      .modal-header
-        button(type="button", class="close", data-dismiss="modal", aria-hidden="true") &times;
-        h4 Reply to #{comment.user.name}'s comment
-      .modal-body
-        input(type='hidden', name='_csrf', value="#{csrf_token}")
-        .control-group
-          .controls
-            textarea.input-comment(type='text', rows="6", name="body", placeholder='Add your comment')
-      .modal-footer
-        button.btn.btn-primary(type="submit") Save
-        a.btn(href="#", data-dismiss="modal") Close
+      - if(comment.level < 2)
+        a(data-target="#replyModal_#{comment.slug}", data-toggle="modal") Reply
+        form.modal.fade(id="replyModal_#{comment.slug}", method="post", action="/articles/#{article._id}/comments/#{comment.slug}")
+          .modal-header
+            button(type="button", class="close", data-dismiss="modal", aria-hidden="true") &times;
+            h4 Reply
+          .modal-body
+            input(type='hidden', name='_csrf', value="#{csrf_token}")
+            .control-group
+              .controls
+                textarea.input-comment(type='text', rows="6", name="body", placeholder='Add your comment')
+          .modal-footer
+            button.btn.btn-primary(type="submit") Save
+            a.btn(href="#", data-dismiss="modal") Close

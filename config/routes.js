@@ -103,7 +103,7 @@ module.exports = function (app, passport) {
     // comment routes
     var comments = require('../app/controllers/comments')
     app.post('/articles/:id/comments', auth.requiresLogin, comments.create)
-    app.post('/articles/:id/comments/:rpl', auth.requiresLogin, comments.create)
+    app.post('/articles/:id/comments/:slug', auth.requiresLogin, comments.create)
     app.get('/articles/:id/comments', auth.requiresLogin, comments.create)
 
     // tag routes
