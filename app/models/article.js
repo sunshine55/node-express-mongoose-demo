@@ -96,27 +96,6 @@ ArticleSchema.methods = {
             }
             self.save(cb)
         }, 'article')
-    },
-
-    /**
-     * Add comment
-     *
-     * @param {User} user
-     * @param {Object} comment
-     * @param {Function} cb
-     * @api private
-     */
-
-    addComment: function (user, comment, cb) {
-        var notify = require('../mailer/notify')
-
-        notify.comment({
-            article: this,
-            currentUser: user,
-            comment: comment.body
-        })
-
-        this.save(cb)
     }
 
 }
