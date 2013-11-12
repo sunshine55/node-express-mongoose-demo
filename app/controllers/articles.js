@@ -119,13 +119,15 @@ exports.update = function (req, res) {
 exports.show = function (req, res) {
     Comment.find({ article: req.article.id })
         .populate('user', 'username')
-        .sort('slug')
         .exec(function (err, comments) {
             if(err) return res.render('500')
+            var cms = _.sortBy(comments, function(cm) {
+                return cm.slug
+            })
             res.render('articles/show', {
                 title: req.article.title,
                 article: req.article,
-                comments: comments
+                comments: cms
             })
         })
 }
