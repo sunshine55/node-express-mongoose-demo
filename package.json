@@ -42,7 +42,8 @@
     "async": "latest",
     "view-helpers": "latest",
     "forever": "latest",
-    "shortid": "latest"
+    "shortid": "latest",
+    "mkdirp": "~0.3.5"
   },
   "devDependencies": {
     "supertest": "latest",

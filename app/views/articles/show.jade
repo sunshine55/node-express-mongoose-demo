@@ -5,6 +5,9 @@ block main
 
 block content
   .row
+    .span3
+      - if(article.image)
+        img(src="/"+article.image)
     .span9
       p=article.body
       .meta.muted
@@ -20,9 +23,6 @@ block content
                 i.icon-tags
                 |  #{tag}
               &nbsp;&nbsp;
-    .span3
-      - if (!article.isNew && article.image && article.image.files && article.image.files.length)
-        img(src=article.image.cdnUri + '/mini_' + article.image.files[0])
 
   p
     br

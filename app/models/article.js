@@ -8,6 +8,9 @@ var mongoose = require('mongoose')
     , config = require('../../config/config')[env]
     , imagerConfig = require(config.root + '/config/imager.js')
     , Schema = mongoose.Schema
+    , fs = require('fs')
+    , path = require('path')
+    , mkdirp = require('mkdirp')
 
 /**
  * Getters
@@ -34,10 +37,7 @@ var ArticleSchema = new Schema({
     body: {type: String, default: '', trim: true},
     user: {type: Schema.ObjectId, ref: 'User'},
     tags: {type: [], get: getTags, set: setTags},
-    image: {
-        cdnUri: String,
-        files: []
-    },
+    image: { type: String, default: '' },
     createdAt: {type: Date, default: Date.now}
 })
 
@@ -55,7 +55,7 @@ ArticleSchema.path('body').validate(function (body) {
 
 /**
  * Pre-remove hook
- */
+
 
 ArticleSchema.pre('remove', function (next) {
     var imager = new Imager(imagerConfig, 'S3')
@@ -67,7 +67,7 @@ ArticleSchema.pre('remove', function (next) {
     }, 'article')
 
     next()
-})
+})*/
 
 /**
  * Methods
@@ -83,19 +83,46 @@ ArticleSchema.methods = {
      * @api private
      */
 
-    uploadAndSave: function (images, cb) {
-        if (!images || !images.length) return this.save(cb)
+    uploadAndSave: function (username, image, cb) {
+        var self, cdnUri, newPath;
 
-        var imager = new Imager(imagerConfig, 'S3')
-        var self = this
+        if (!image) return this.save(cb);
 
-        imager.upload(images, function (err, cdnUri, files) {
-            if (err) return cb(err)
-            if (files.length) {
-                self.image = { cdnUri: cdnUri, files: files }
-            }
-            self.save(cb)
-        }, 'article')
+        self = this;
+        cdnUri = path.join(__dirname, '/../../uploads/', username);
+        newPath = path.join(cdnUri, image.name);
+
+        fs.readFile(image.path, function (err, data) {
+            if(err) return cb(err);
+            mkdirp(cdnUri, function(err) {
+                fs.writeFile(newPath, data, function (err) {
+                    if(err) return cb(err);
+                });
+            });
+        });
+        self.image = username + '/' + image.name;
+        self.save(cb);
+    },
+
+    /**
+     * Add comment
+     *
+     * @param {User} user
+     * @param {Object} comment
+     * @param {Function} cb
+     * @api private
+     */
+
+    addComment: function (user, comment, cb) {
+        var notify = require('../mailer/notify')
+
+        notify.comment({
+            article: this,
+            currentUser: user,
+            comment: comment.body
+        })
+
+        this.save(cb)
     }
 
 }

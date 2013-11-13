@@ -9,7 +9,8 @@ block content
       .article
         h3
           a(href='/articles/'+article._id, title=article.title) #{article.title}
-        p= article.body
+        - var shortBody = article.body.substr(0,150) + " ..."
+        p= shortBody
 
         .meta.muted
           span= formatDate(article.createdAt)
